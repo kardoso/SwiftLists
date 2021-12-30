@@ -7,20 +7,28 @@
 
 import SwiftUI
 
+enum Period: String, CaseIterable {
+    case original = "Original trilogy"
+    case prequel = "Prequel trilogy"
+    case sequel = "Sequel trilogy"
+    case standalone = "Standalone"
+}
+
 struct Movie: Identifiable {
     var id = UUID()
     var title: String
+    var period: Period
 }
 
 struct ContentView: View {
     @State var movies = [
-        Movie(title: "Episode IV - A New Hope"),
-        Movie(title: "Episode V - The Empire Strikes"),
-        Movie(title: "Episode VI - Return of the Jedi"),
-        Movie(title: "Spider-Man: No Way Home"),
-        Movie(title: "The Fellowship of the Ring"),
-        Movie(title: "The Two Towers"),
-        Movie(title: "The Return of the King")
+        Movie(title: "Episode IV - A New Hope", period: .original),
+        Movie(title: "Episode V - The Empire Strikes", period: .original),
+        Movie(title: "Episode VI - Return of the Jedi", period: .original),
+        Movie(title: "Star Wars: The Clone Wars", period: .standalone),
+        Movie(title: "Rogue One", period: .standalone),
+        Movie(title: "Solo", period: .standalone),
+        Movie(title: "The Mandalorian", period: .standalone)
     ]
     var body: some View {
         VStack {
@@ -29,13 +37,27 @@ struct ContentView: View {
             /*List(movies, id: \.id) { movie in
                 Text(movie.title)
             }*/
-            List {
+            
+            /*List {
                 ForEach(movies, id:\.id){ movie in
                     Text(movie.title)
                 }
                 .onDelete { indexSet in
                     for index in indexSet {
                         movies.remove(at: index)
+                    }
+                }
+            }*/
+            
+            List {
+                ForEach(Period.allCases, id: \.rawValue) { period in
+                    Section(header: Text(period.rawValue)) {
+                        ForEach(movies.filter { $0.period == period }) { movie in
+                            VStack {
+                                Text(movie.title)
+                                Text(movie.period.rawValue)
+                            }
+                        }
                     }
                 }
             }
