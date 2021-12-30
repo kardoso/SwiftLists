@@ -17,14 +17,27 @@ struct ContentView: View {
         Movie(title: "Episode IV - A New Hope"),
         Movie(title: "Episode V - The Empire Strikes"),
         Movie(title: "Episode VI - Return of the Jedi"),
-        Movie(title: "Spider-Man: No Way Home")
+        Movie(title: "Spider-Man: No Way Home"),
+        Movie(title: "The Fellowship of the Ring"),
+        Movie(title: "The Two Towers"),
+        Movie(title: "The Return of the King")
     ]
     var body: some View {
         VStack {
             Text("Movies List")
                 .font(.largeTitle)
-            List(movies, id: \.id) { movie in
+            /*List(movies, id: \.id) { movie in
                 Text(movie.title)
+            }*/
+            List {
+                ForEach(movies, id:\.id){ movie in
+                    Text(movie.title)
+                }
+                .onDelete { indexSet in
+                    for index in indexSet {
+                        movies.remove(at: index)
+                    }
+                }
             }
         }
     }
